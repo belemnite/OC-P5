@@ -1,5 +1,5 @@
 /*
--récupérer et analyser les données saisies par l'utilisateur dans le formulaire
+
 -afficher un message d'erreur si besoin
 -constituer un objet contact (à partir des données du formulaire) et un tableau de produits
 */
@@ -67,11 +67,9 @@ async function main() {
       localStorage.setItem("panier", JSON.stringify(panier));
     })
   });
-  /*document.addEventListener('DOMContentLoaded',function() {
-    document.querySelector('input[name="itemQuantity"]').onchange
-  })*/
 
-   document.getElementById("order").addEventListener("click", envoyerCommande);
+
+   document.getElementById("order").addEventListener("click", envoyerCommande);//-récupérer et analyser les données saisies par l'utilisateur dans le formulaire
    function envoyerCommande(){
     //verifier la validation du formulaire avec regex
     /*isValid(value){
