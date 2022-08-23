@@ -67,17 +67,19 @@ async function main() {
       localStorage.setItem("panier", JSON.stringify(panier));
     })
   });
+  //Afficher le nombre total d'articles du panier
   /* let totalQuantity = 0;
     for (let i=0; i<panier.length; i++){
     totalQuantity += panier [i];
     }
     console.log(totalQuantity);
 
+  //Afficher le prix total du panier
     let totalPrice = 0;
     for (let i=0; i<panier.length; i++){
     totalPrice += panier [i];
     }
-    console.log(totalPrice)
+    console.log(totalPrice);
     
   */
 
@@ -86,25 +88,25 @@ async function main() {
    function envoyerCommande(){
     //verifier la validation du formulaire avec regex
     /*isValid(value){
-      let firstName = [^/A-Z//a-z/];
+      let firstName = [^/A-Z//a-z/];//vérification du champ prénom
       document.getElementById("firstNameErrorMsg")
 
-      let lastName = [/A-Z/];
+      let lastName = [/A-Z/];//vérification du champ nom de famille
       document.getElementById("lastNameErrorMsg")
 
-      let address= [/a-zA-Z0-9/\,]m;
+      let address= [/a-zA-Z0-9/\,]m;//vérification du champ adresse
       document.getElementById("addressErrorMsg")
 
-      let city = [/0-9{5}/];
+      let city = [/0-9{5}/];//vérification du champ code postal
       document.getElementById("cityErrorMsg")
 
-      let email = /^[a-zA-Z0-9.! #$%&'*+/=? ^_`{|}~-]+@[a-zA-Z0-9-]+(?:\. [a-zA-Z0-9-]+)*$/;
+      let email = /^[a-zA-Z0-9.! #$%&'*+/=? ^_`{|}~-]+@[a-zA-Z0-9-]+(?:\. [a-zA-Z0-9-]+)*$/;//vérification du champ email
       document.getElementById("emailErrorMsg")
 
     };*/
-    
+    //constituer un tableau contact (firstName, lastName, address, city, email)
 
-    //constituer un objet JSON avec les infos de la commande
+    //constituer un objet JSON avec les infos de la commande (contact+panier)
     /*
       if (!formValide()){
     return;
