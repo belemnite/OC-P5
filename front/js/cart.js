@@ -67,6 +67,19 @@ async function main() {
       localStorage.setItem("panier", JSON.stringify(panier));
     })
   });
+  /* let totalQuantity = 0;
+    for (let i=0; i<panier.length; i++){
+    totalQuantity += panier [i];
+    }
+    console.log(totalQuantity);
+
+    let totalPrice = 0;
+    for (let i=0; i<panier.length; i++){
+    totalPrice += panier [i];
+    }
+    console.log(totalPrice)
+    
+  */
 
 
    document.getElementById("order").addEventListener("click", envoyerCommande);//-récupérer et analyser les données saisies par l'utilisateur dans le formulaire
@@ -95,7 +108,10 @@ async function main() {
     /*
       if (!formValide()){
     return;
+    
   }
+  else 
+  let contact =
     */
     //faire fetch avec la methode POST
    }
