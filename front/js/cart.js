@@ -113,8 +113,10 @@ async function main() {
     
   }
   else 
-  let contact =
+  let contact = new Array(firstName, lastName, address, city, email)
+  let order = (id, panier, contact)
     */
     //faire fetch avec la methode POST
+    //fetch order
    }
 }
