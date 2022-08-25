@@ -68,7 +68,7 @@ async function main() {
     })
   });
   //Afficher le nombre total d'articles du panier
-  /* let totalQuantity = 0;
+    let totalQuantity = 0;
     for (let i=0; i<panier.length; i++){
     totalQuantity += panier [i];
     }
@@ -81,29 +81,29 @@ async function main() {
     }
     console.log(totalPrice);
     
-  */
+  
 
 
    document.getElementById("order").addEventListener("click", envoyerCommande);//-récupérer et analyser les données saisies par l'utilisateur dans le formulaire
    function envoyerCommande(){
     //verifier la validation du formulaire avec regex
-    /*isValid(value){
-      let firstName = [^/A-Z//a-z/];//vérification du champ prénom
-      document.getElementById("firstNameErrorMsg")
+    /*
+      let firstName = [/A-Za-z/];//vérification du champ prénom
+      document.getElementById("firstNameErrorMsg").insertAdjacentHTML("beforeend")
 
       let lastName = [/A-Z/];//vérification du champ nom de famille
-      document.getElementById("lastNameErrorMsg")
+      document.getElementById("lastNameErrorMsg").insertAdjacentHTML("beforeend")
 
-      let address= [/a-zA-Z0-9/\,]m;//vérification du champ adresse
-      document.getElementById("addressErrorMsg")
+      let address= [/a-zA-Z0-9/];//vérification du champ adresse
+      document.getElementById("addressErrorMsg").insertAdjacentHTML("beforeend")
 
       let city = [/0-9{5}/];//vérification du champ code postal
-      document.getElementById("cityErrorMsg")
+      document.getElementById("cityErrorMsg").insertAdjacentHTML("beforeend")
 
       let email = /^[a-zA-Z0-9.! #$%&'*+/=? ^_`{|}~-]+@[a-zA-Z0-9-]+(?:\. [a-zA-Z0-9-]+)*$/;//vérification du champ email
-      document.getElementById("emailErrorMsg")
-
-    };*/
+      document.getElementById("emailErrorMsg").insertAdjacentHTML("beforeend")
+    */
+    
     //constituer un tableau contact (firstName, lastName, address, city, email)
 
     //constituer un objet JSON avec les infos de la commande (contact+panier)
