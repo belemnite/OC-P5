@@ -8,12 +8,14 @@ main();
 async function main() {
   let panierTxt = localStorage.getItem("panier") || "[]"; //-stocker les choix de l'utilisateur (localStorage)
   let panier = JSON.parse(panierTxt);
+  let panierAvecPrix = [];
   console.log("panier: ", panier);//-recupérer le panier 
    for(const article of panier){//-parcourir l'array
     await fetch(`http://localhost:3000/api/products/${article.id}`).then((reponse) =>
       reponse.json()
     )
     .then(articleInfo=>{
+      panierAvecPrix.push({...article,prix: articleInfo.price});//...spreadOperator
       document.getElementById("cart__items").insertAdjacentHTML("beforeend",//-créer et insérer des éléments dans la page panier
       `<article class="cart__item" data-id="${article.id}" data-color="${article.couleur}">
       <div class="cart__item__img">
@@ -38,6 +40,7 @@ async function main() {
     </article>`)
     });
   };
+  afficherTotal();
   //ajouter un evenement supprimer avec data et dataset
   const deleteItemBtns =document.querySelectorAll(".deleteItem");
   console.log(deleteItemBtns);
@@ -48,7 +51,9 @@ async function main() {
       console.log(closest.dataset);
       panier=panier.filter(article=>article.id!=closest.dataset.id||article.couleur!=closest.dataset.color);
       localStorage.setItem("panier", JSON.stringify(panier));
+      panierAvecPrix=panierAvecPrix.filter(article=>article.id!=closest.dataset.id||article.couleur!=closest.dataset.color);
       closest.remove();
+      afficherTotal();
     })
   });
 
@@ -65,53 +70,47 @@ async function main() {
       let produitEnCours = panier.find(article => article.id ==closest.dataset.id && article.couleur ==closest.dataset.color);
       produitEnCours.quantite=nouvelleQuantite;
       localStorage.setItem("panier", JSON.stringify(panier));
+      let produitAvecPrixEnCours = panierAvecPrix.find(article => article.id ==closest.dataset.id && article.couleur ==closest.dataset.color);
+      produitAvecPrixEnCours.quantite=nouvelleQuantite;
+      
+      afficherTotal();
     })
   });
+  function afficherTotal(){
   //Afficher le nombre total d'articles du panier
     let totalQuantity = 0;
     for (let i=0; i<panier.length; i++){
-    totalQuantity += panier [i];
+    totalQuantity += parseInt(panier[i].quantite) ;
     }
-    console.log(totalQuantity);
+    document.getElementById("totalQuantity").textContent=totalQuantity;
 
   //Afficher le prix total du panier
     let totalPrice = 0;
-    for (let i=0; i<panier.length; i++){
-    totalPrice += panier [i];
+    for (let i=0; i<panierAvecPrix.length; i++){
+    totalPrice += panierAvecPrix[i].prix *parseInt(panierAvecPrix[i].quantite);
     }
-    console.log(totalPrice);
-    
+    document.getElementById("totalPrice").textContent=totalPrice.toFixed(2);
+  } 
   
 
 
    document.getElementById("order").addEventListener("click", envoyerCommande);//-récupérer et analyser les données saisies par l'utilisateur dans le formulaire
-   function envoyerCommande(){
+   function envoyerCommande(event){
+    event.preventDefault();
+    if (!formulaireValide()){
+      return;
+      
+    }
+    console.log("formulaire valide")
     //verifier la validation du formulaire avec regex
     /*
-      let firstName = [/A-Za-z/];//vérification du champ prénom
-      document.getElementById("firstNameErrorMsg").insertAdjacentHTML("beforeend")
 
-      let lastName = [/A-Z/];//vérification du champ nom de famille
-      document.getElementById("lastNameErrorMsg").insertAdjacentHTML("beforeend")
-
-      let address= [/a-zA-Z0-9/];//vérification du champ adresse
-      document.getElementById("addressErrorMsg").insertAdjacentHTML("beforeend")
-
-      let city = [/0-9{5}/];//vérification du champ code postal
-      document.getElementById("cityErrorMsg").insertAdjacentHTML("beforeend")
-
-      let email = /^[a-zA-Z0-9.! #$%&'*+/=? ^_`{|}~-]+@[a-zA-Z0-9-]+(?:\. [a-zA-Z0-9-]+)*$/;//vérification du champ email
-      document.getElementById("emailErrorMsg").insertAdjacentHTML("beforeend")
     */
     
     //constituer un tableau contact (firstName, lastName, address, city, email)
 
     //constituer un objet JSON avec les infos de la commande (contact+panier)
     /*
-      if (!formValide()){
-    return;
-    
-  }
   else 
   let contact = new Array(firstName, lastName, address, city, email)
   let order = (id, panier, contact)
@@ -119,4 +118,40 @@ async function main() {
     //faire fetch avec la methode POST
     //fetch order
    }
+   function formulaireValide(){
+    let resultat = true;
+    const inputPrenom = document.getElementById("firstName").value;
+    /*if (inputPrenom === "") {
+      document.getElementById("firstNameErrorMsg").textContent="Veuillez renseigner le prénom";
+      resultat= false; 
+    }
+    */
+    let regexPrenom =  /^[A-Z][A-Za-zéç\-]+(\s[A-Z][A-Za-zéç]+)*$/
+    ; //vérification du champ prénom
+    if(!regexPrenom.test(inputPrenom)){
+      document.getElementById("firstNameErrorMsg").textContent="Ecrire un prénom valide";
+      resultat= false; 
+    }
+
+
+    let lastName = /^[A-Z][A-Za-zéç\-]+(\s[A-Z][A-Za-zéç]+)*$/;//vérification du champ nom de famille
+    // document.getElementById("lastNameErrorMsg").insertAdjacentHTML("beforeend")
+
+    let address = /^[A-Za-z0-9éç°',]+(\s[A-Za-z0-9éç°',]+)*$/
+    ;//vérification du champ adresse
+    // document.getElementById("addressErrorMsg").insertAdjacentHTML("beforeend")
+
+    let regexCity = /0-9{5}/;//vérification du champ code postal
+    // document.getElementById("cityErrorMsg").insertAdjacentHTML("beforeend")
+
+    let regexEmail =  /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+    ;
+    const inputEmail = document.getElementById("email").value;
+    if(!regexEmail.test(inputEmail)){
+      document.getElementById("emailErrorMsg").textContent="Ecrire un email valide";
+      resultat= false; 
+    }//vérification du champ email
+    // document.getElementById("emailErrorMsg").insertAdjacentHTML("beforeend")
+   return resultat;
+  }
 }
