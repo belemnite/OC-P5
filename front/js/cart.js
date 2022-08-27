@@ -102,10 +102,7 @@ async function main() {
       
     }
     console.log("formulaire valide")
-    //verifier la validation du formulaire avec regex
-    /*
-
-    */
+    
     
     //constituer un tableau contact (firstName, lastName, address, city, email)
 
@@ -118,7 +115,7 @@ async function main() {
     //faire fetch avec la methode POST
     //fetch order
    }
-   function formulaireValide(){
+   function formulaireValide(){ //verifier la validation du formulaire avec regex
     let resultat = true;
     const inputPrenom = document.getElementById("firstName").value;
     /*if (inputPrenom === "") {
@@ -126,32 +123,43 @@ async function main() {
       resultat= false; 
     }
     */
-    let regexPrenom =  /^[A-Z][A-Za-zéç\-]+(\s[A-Z][A-Za-zéç]+)*$/
+    let regexPrenom =  /^[A-Z][A-Za-zàéèêëîïôùûüç\-]+(\s[A-Z][A-Za-zàéèêëîïôùûüç]+)*$/
     ; //vérification du champ prénom
     if(!regexPrenom.test(inputPrenom)){
       document.getElementById("firstNameErrorMsg").textContent="Ecrire un prénom valide";
       resultat= false; 
     }
+    
+    const inputNom = document.getElementById("lastName").value;
+    let regexNom = /^[A-Z][A-Za-zàéèêëîïôùûüç\-]+(\s[A-Z][A-Za-zàéèêëîïôùûüç]+)*$/; //vérification du champ nom de famille
+    if(!regexNom.test(inputNom)){
+      document.getElementById("lastNameErrorMsg").textContent="Ecrire un nom valide";
+      resultat= false; 
+    }
 
+    const inputAdresse = document.getElementById("address").value;
+    let regexAdresse = /^[A-Za-z0-9àéèêëîïôùûüç°',]+(\s[A-Za-z0-9àéèêëîïôùûüç°',]+)*$/
+    ; //vérification du champ adresse
+    if(!regexAdresse.test(inputAdresse)){
+      document.getElementById("addressErrorMsg").textContent="Ecrire une adresse valide";
+      resultat= false; 
+    }
 
-    let lastName = /^[A-Z][A-Za-zéç\-]+(\s[A-Z][A-Za-zéç]+)*$/;//vérification du champ nom de famille
-    // document.getElementById("lastNameErrorMsg").insertAdjacentHTML("beforeend")
+    const inputVille = document.getElementById("city").value;
+    let regexVille = /^[0-9{5}]+(\s[A-Za-zàéèêëîïôùûüç'\-]+)*$/; //vérification du champ code postal
+    if(!regexVille.test(inputVille)){
+      document.getElementById("cityErrorMsg").textContent="Ecrire un code postal valide";
+      resultat= false; 
 
-    let address = /^[A-Za-z0-9éç°',]+(\s[A-Za-z0-9éç°',]+)*$/
-    ;//vérification du champ adresse
-    // document.getElementById("addressErrorMsg").insertAdjacentHTML("beforeend")
-
-    let regexCity = /0-9{5}/;//vérification du champ code postal
-    // document.getElementById("cityErrorMsg").insertAdjacentHTML("beforeend")
-
-    let regexEmail =  /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
-    ;
     const inputEmail = document.getElementById("email").value;
+    let regexEmail =  /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+    ; //vérification du champ email
     if(!regexEmail.test(inputEmail)){
       document.getElementById("emailErrorMsg").textContent="Ecrire un email valide";
       resultat= false; 
-    }//vérification du champ email
-    // document.getElementById("emailErrorMsg").insertAdjacentHTML("beforeend")
+    }
+    
    return resultat;
   }
+}
 }
