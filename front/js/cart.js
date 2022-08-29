@@ -117,12 +117,21 @@ async function main() {
         email:formulaireValide.email.value
 
       }
-      products: productsID
+      products: productsID;
     }
-
+    let options = { //faire un fetch avec la methode POST
+      method: "POST",
+      body: JSON.stringify(order),
+      headers: {
+        "content-type": 'application/json',
+      }
+    }
+    fetch(`http://localhost:3000/api/products/order`, options).then((reponse)=>
+    reponse.json)
+      
+    }
     */
-    //faire fetch avec la methode POST
-    //fetch order
+
    }
    function formulaireValide(){ //verifier la validation du formulaire avec regex
     let resultat = true;
