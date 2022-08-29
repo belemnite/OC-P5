@@ -106,11 +106,20 @@ async function main() {
     
     //constituer un tableau contact (firstName, lastName, address, city, email)
 
-    //constituer un objet JSON avec les infos de la commande (contact+panier)
+    
     /*
-  else 
-  let contact = new Array(firstName, lastName, address, city, email)
-  let order = (id, panier, contact)
+    let order = { //constituer un objet JSON avec les infos de la commande (contact+panier)
+      contact:{ //constituer un tableau contact (firstName, lastName, address, city, email)
+        firstName:formulaireValide.firstName.value,
+        lastName:forumaireValide.lastName.value,
+        address:formulaireValide.address.value,
+        city:formulaireValide.city.value,
+        email:formulaireValide.email.value
+
+      }
+      products: productsID
+    }
+
     */
     //faire fetch avec la methode POST
     //fetch order
@@ -162,4 +171,5 @@ async function main() {
    return resultat;
   }
 }
+
 }
