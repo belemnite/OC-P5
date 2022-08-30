@@ -3,7 +3,7 @@ main();
 function main() {
 
 
-let params= new URLSearchParams(window.location.search)//-récupérer l'ID depuis l'URL(urlSearchParam)
+let params= new URLSearchParams(window.location.search)//-récupérer l'ID depuis l'URL( grâce à urlSearchParam)
 const id = params.get('id')
 console.log(id);
 
