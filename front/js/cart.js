@@ -10,14 +10,14 @@ async function main() {
   let panier = JSON.parse(panierTxt);
   let panierAvecPrix = [];
   console.log("panier: ", panier);//-recupérer le panier 
-   for(const article of panier){//-parcourir l'array
+  for (const article of panier) {//-parcourir l'array
     await fetch(`http://localhost:3000/api/products/${article.id}`).then((reponse) =>
       reponse.json()
     )
-    .then(articleInfo=>{
-      panierAvecPrix.push({...article,prix: articleInfo.price});//...spreadOperator
-      document.getElementById("cart__items").insertAdjacentHTML("beforeend",//-créer et insérer des éléments dans la page panier
-      `<article class="cart__item" data-id="${article.id}" data-color="${article.couleur}">
+      .then(articleInfo => {
+        panierAvecPrix.push({ ...article, prix: articleInfo.price });//...spreadOperator
+        document.getElementById("cart__items").insertAdjacentHTML("beforeend",//-créer et insérer des éléments dans la page panier
+          `<article class="cart__item" data-id="${article.id}" data-color="${article.couleur}">
       <div class="cart__item__img">
         <img src="${articleInfo.imageUrl}" alt="${articleInfo.altTxt}">
       </div>
@@ -38,86 +38,83 @@ async function main() {
         </div>
       </div>
     </article>`)
-    });
+      });
   };
   afficherTotal();
   //ajouter un evenement supprimer avec data et dataset
-  const deleteItemBtns =document.querySelectorAll(".deleteItem");
+  const deleteItemBtns = document.querySelectorAll(".deleteItem");
   console.log(deleteItemBtns);
-  deleteItemBtns.forEach(deleteItem=>{
-    deleteItem.addEventListener("click",function (e) {
+  deleteItemBtns.forEach(deleteItem => {
+    deleteItem.addEventListener("click", function (e) {
       const closest = e.target.closest(".cart__item");
       console.log("dataset");
       console.log(closest.dataset);
-      panier=panier.filter(article=>article.id!=closest.dataset.id||article.couleur!=closest.dataset.color);
+      panier = panier.filter(article => article.id != closest.dataset.id || article.couleur != closest.dataset.color);
       localStorage.setItem("panier", JSON.stringify(panier));
-      panierAvecPrix=panierAvecPrix.filter(article=>article.id!=closest.dataset.id||article.couleur!=closest.dataset.color);
+      panierAvecPrix = panierAvecPrix.filter(article => article.id != closest.dataset.id || article.couleur != closest.dataset.color);
       closest.remove();
       afficherTotal();
     })
   });
 
   //ajouter un evenement pour changement de quantité
-  const changeQuantityInputs =document.querySelectorAll(".itemQuantity");
+  const changeQuantityInputs = document.querySelectorAll(".itemQuantity");
   console.log(changeQuantityInputs);
-  changeQuantityInputs.forEach(changeQuantityInput=>{
-    changeQuantityInput.addEventListener("change", (e)=>{
-      const nouvelleQuantite =e.target.value;
+  changeQuantityInputs.forEach(changeQuantityInput => {
+    changeQuantityInput.addEventListener("change", (e) => {
+      const nouvelleQuantite = e.target.value;
       console.log(nouvelleQuantite)
       const closest = e.target.closest(".cart__item");
       console.log("dataset");
       console.log(closest.dataset);
-      let produitEnCours = panier.find(article => article.id ==closest.dataset.id && article.couleur ==closest.dataset.color);
-      produitEnCours.quantite=nouvelleQuantite;
+      let produitEnCours = panier.find(article => article.id == closest.dataset.id && article.couleur == closest.dataset.color);
+      produitEnCours.quantite = nouvelleQuantite;
       localStorage.setItem("panier", JSON.stringify(panier));
-      let produitAvecPrixEnCours = panierAvecPrix.find(article => article.id ==closest.dataset.id && article.couleur ==closest.dataset.color);
-      produitAvecPrixEnCours.quantite=nouvelleQuantite;
-      
+      let produitAvecPrixEnCours = panierAvecPrix.find(article => article.id == closest.dataset.id && article.couleur == closest.dataset.color);
+      produitAvecPrixEnCours.quantite = nouvelleQuantite;
+
       afficherTotal();
     })
   });
-  function afficherTotal(){
-  //Afficher le nombre total d'articles du panier
+  function afficherTotal() {
+    //Afficher le nombre total d'articles du panier
     let totalQuantity = 0;
-    for (let i=0; i<panier.length; i++){
-    totalQuantity += parseInt(panier[i].quantite) ;
+    for (let i = 0; i < panier.length; i++) {
+      totalQuantity += parseInt(panier[i].quantite);
     }
-    document.getElementById("totalQuantity").textContent=totalQuantity;
+    document.getElementById("totalQuantity").textContent = totalQuantity;
 
-  //Afficher le prix total du panier
+    //Afficher le prix total du panier
     let totalPrice = 0;
-    for (let i=0; i<panierAvecPrix.length; i++){
-    totalPrice += panierAvecPrix[i].prix *parseInt(panierAvecPrix[i].quantite);
+    for (let i = 0; i < panierAvecPrix.length; i++) {
+      totalPrice += panierAvecPrix[i].prix * parseInt(panierAvecPrix[i].quantite);
     }
-    document.getElementById("totalPrice").textContent=totalPrice.toFixed(2);
-  } 
-  
+    document.getElementById("totalPrice").textContent = totalPrice.toFixed(2);
+  }
 
 
-   document.getElementById("order").addEventListener("click", envoyerCommande);//-récupérer et analyser les données saisies par l'utilisateur dans le formulaire
-   function envoyerCommande(event){
+
+  document.getElementById("order").addEventListener("click", envoyerCommande);//-récupérer et analyser les données saisies par l'utilisateur dans le formulaire
+  function envoyerCommande(event) {
     event.preventDefault();
-    if (!formulaireValide()){
+    if (!formulaireValide()) {
       return;
-      
+
     }
     console.log("formulaire valide")
-    
-    
-    //constituer un tableau contact (firstName, lastName, address, city, email)
 
-    
-    /*
+
+
     let order = { //constituer un objet JSON avec les infos de la commande (contact+panier)
-      contact:{ //constituer un tableau contact (firstName, lastName, address, city, email)
-        firstName:formulaireValide.firstName.value,
-        lastName:forumaireValide.lastName.value,
-        address:formulaireValide.address.value,
-        city:formulaireValide.city.value,
-        email:formulaireValide.email.value
+      contact: { //constituer un tableau contact (firstName, lastName, address, city, email)
+        firstName: document.getElementById("firstName").value,
+        lastName: document.getElementById("lastName").value,
+        address: document.getElementById("address").value,
+        city: document.getElementById("city").value,
+        email: document.getElementById("email").value,
 
-      }
-      products: productsID;
+      },
+      products: panier.map((produit) => produit.id)
     }
     let options = { //faire un fetch avec la methode POST
       method: "POST",
@@ -126,59 +123,80 @@ async function main() {
         "content-type": 'application/json',
       }
     }
-    fetch(`http://localhost:3000/api/products/order`, options).then((reponse)=>
-    reponse.json)
-      
-    }
-    */
+    fetch(`http://localhost:3000/api/products/order`, options)
+      .then((response) => {
+        console.log(response);
+        if (response.ok == true) {
+          console.log("Votre Commande reçue avec succès!");
+          //console.log(json);
+          localStorage.removeItem("panier");
+          response.json().then((confirmation) => {
+            window.location.replace(
+              `confirmation.html?oi=${confirmation.orderId}`
+            ); //ouvrir une page avec js (redirect: redirige vers la page de confirmation)avec comme paramêtre "ic" = id de la commande
+          });
+          return;
+        } else {
+          console.log("Erreur!");
+          return;
+        }
+      })
+      .catch((error) => {
+        console.log("Erreur!");
+      });
 
-   }
-   function formulaireValide(){ //verifier la validation du formulaire avec regex
-    let resultat = true;
-    const inputPrenom = document.getElementById("firstName").value;
-    /*if (inputPrenom === "") {
-      document.getElementById("firstNameErrorMsg").textContent="Veuillez renseigner le prénom";
-      resultat= false; 
-    }
-    */
-    let regexPrenom =  /^[A-Z][A-Za-zàéèêëîïôùûüç\-]+(\s[A-Z][A-Za-zàéèêëîïôùûüç]+)*$/
-    ; //vérification du champ prénom
-    if(!regexPrenom.test(inputPrenom)){
-      document.getElementById("firstNameErrorMsg").textContent="Ecrire un prénom valide";
-      resultat= false; 
-    }
-    
-    const inputNom = document.getElementById("lastName").value;
-    let regexNom = /^[A-Z][A-Za-zàéèêëîïôùûüç\-]+(\s[A-Z][A-Za-zàéèêëîïôùûüç]+)*$/; //vérification du champ nom de famille
-    if(!regexNom.test(inputNom)){
-      document.getElementById("lastNameErrorMsg").textContent="Ecrire un nom valide";
-      resultat= false; 
-    }
 
-    const inputAdresse = document.getElementById("address").value;
-    let regexAdresse = /^[A-Za-z0-9àéèêëîïôùûüç°',]+(\s[A-Za-z0-9àéèêëîïôùûüç°',]+)*$/
-    ; //vérification du champ adresse
-    if(!regexAdresse.test(inputAdresse)){
-      document.getElementById("addressErrorMsg").textContent="Ecrire une adresse valide";
-      resultat= false; 
-    }
-
-    const inputVille = document.getElementById("city").value;
-    let regexVille = /^[0-9{5}]+(\s[A-Za-zàéèêëîïôùûüç'\-]+)*$/; //vérification du champ code postal
-    if(!regexVille.test(inputVille)){
-      document.getElementById("cityErrorMsg").textContent="Ecrire un code postal valide";
-      resultat= false; 
-
-    const inputEmail = document.getElementById("email").value;
-    let regexEmail =  /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
-    ; //vérification du champ email
-    if(!regexEmail.test(inputEmail)){
-      document.getElementById("emailErrorMsg").textContent="Ecrire un email valide";
-      resultat= false; 
-    }
-    
-   return resultat;
   }
-}
+
 
 }
+function formulaireValide() { //verifier la validation du formulaire avec regex
+  let resultat = true;
+  const inputPrenom = document.getElementById("firstName").value;
+  /*if (inputPrenom === "") {
+    document.getElementById("firstNameErrorMsg").textContent="Veuillez renseigner le prénom";
+    resultat= false; 
+  }
+  */
+  let regexPrenom = /^[A-Z][A-Za-zàéèêëîïôùûüç\-]+(\s[A-Z][A-Za-zàéèêëîïôùûüç]+)*$/
+    ; //vérification du champ prénom
+  if (!regexPrenom.test(inputPrenom)) {
+    document.getElementById("firstNameErrorMsg").textContent = "Ecrire un prénom valide";
+    resultat = false;
+  }
+
+  const inputNom = document.getElementById("lastName").value;
+  let regexNom = /^[A-Z][A-Za-zàéèêëîïôùûüç\-]+(\s[A-Z][A-Za-zàéèêëîïôùûüç]+)*$/; //vérification du champ nom de famille
+  if (!regexNom.test(inputNom)) {
+    document.getElementById("lastNameErrorMsg").textContent = "Ecrire un nom valide";
+    resultat = false;
+  }
+
+  const inputAdresse = document.getElementById("address").value;
+  let regexAdresse = /^[A-Za-z0-9àéèêëîïôùûüç°',]+(\s[A-Za-z0-9àéèêëîïôùûüç°',]+)*$/
+    ; //vérification du champ adresse
+  if (!regexAdresse.test(inputAdresse)) {
+    document.getElementById("addressErrorMsg").textContent = "Ecrire une adresse valide";
+    resultat = false;
+  }
+
+  const inputVille = document.getElementById("city").value;
+  let regexVille = /^(([0-9{5}]+)|(([A-Za-zàéèêëîïôùûüç'\-]+)*(\s[A-Za-zàéèêëîïôùûüç'\-]+)*))$/; //vérification du champ code postal
+  if (!regexVille.test(inputVille)) {
+    document.getElementById("cityErrorMsg").textContent = "Ecrire un code postal valide";
+    resultat = false;
+  }
+
+  const inputEmail = document.getElementById("email").value;
+  let regexEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+    ; //vérification du champ email
+  if (!regexEmail.test(inputEmail)) {
+    document.getElementById("emailErrorMsg").textContent = "Ecrire un email valide";
+    resultat = false;
+  }
+
+  return resultat;
+}
+
+
+
