@@ -123,17 +123,17 @@ async function main() {
         "content-type": 'application/json',
       }
     }
-    fetch(`http://localhost:3000/api/products/order`, options)
+    fetch(`http://localhost:3000/api/products/order`, options)//récupérer l'identifiant de commande 
       .then((response) => {
         console.log(response);
         if (response.ok == true) {
-          console.log("Votre Commande reçue avec succès!");
+          console.log("Votre commande a été reçue avec succès!");
           //console.log(json);
-          localStorage.removeItem("panier");
+          localStorage.removeItem("panier");//permet de ne pas stocker l'ID de la commande
           response.json().then((confirmation) => {
             window.location.replace(
               `confirmation.html?oi=${confirmation.orderId}`
-            ); //ouvrir une page avec js (redirect: redirige vers la page de confirmation)avec comme paramêtre "ic" = id de la commande
+            ); //ouvrir une page avec js (replace: redirige vers la page de confirmation)avec comme paramêtre "ic" = id de la commande
           });
           return;
         } else {
