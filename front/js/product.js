@@ -27,18 +27,20 @@ fetch(`http://localhost:3000/api/products/${id}`)//-requête fetch pour les info
 
 .catch(erreur=>alert(erreur))
 
-
+//-associer la fonction  "ajouterAuPanier" au bouton
 const btnAddToCart = document.getElementById("addToCart");//-lire depuis la page les inputs de l'utilisateur
 btnAddToCart.addEventListener("click", ajouterAuPanier);
 
 function ajouterAuPanier() {
-  if (!formValide()){
+  if (!formValide()){//vérifier la validité des inputs utilisateur avant d'effectuer le traitement
     return;
   }
-  let panierTxt=localStorage.getItem("panier")||"[]";//-stocker les choix de l'utilisateur (localStorage)
+  let panierTxt=localStorage.getItem("panier")||"[]";//-récupérer les choix de l'utilisateur (localStorage)
   let panier=JSON.parse(panierTxt)
   const couleurChoisie = document.getElementById("colors").value;
   const quantiteChoisie = document.getElementById("quantity").value; 
+  
+  // si quantité d'un même produit (même ID, même couleur) supérieure à 1, modifier uniquement la quantité
   let produitExistant = panier.find(article => article.id ==id && article.couleur ==couleurChoisie);
   if (!produitExistant) {
     panier.push({id:id,couleur:couleurChoisie, quantite: quantiteChoisie}); 
@@ -46,10 +48,11 @@ function ajouterAuPanier() {
   else{
     produitExistant.quantite= parseInt(produitExistant.quantite)+parseInt(quantiteChoisie);
   }
-  //-associer ce traitement au bouton "ajouter au panier"
+  
   localStorage.setItem ("panier",JSON.stringify(panier))
 }
 }
+
 function formValide() {
   if (document.getElementById("colors").value==="") {
    alert("Veuillez choisir une couleur");
@@ -66,4 +69,4 @@ function formValide() {
    }
   return true;
 }
-// si quantité d'un même produit (même ID, même couleur) supérieure à 1, modifier uniquement la quantité
+

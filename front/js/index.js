@@ -1,6 +1,5 @@
 main();
 function main() {
-  console.log("Hello world javascript");
   fetch("http://localhost:3000/api/products") //Récupérer le tableau des produits depuis l'URL de l'API
     .then((reponse) => reponse.json()) //extraire le contenu "JSON" de la réponse de l'API
     .then((produits) => {

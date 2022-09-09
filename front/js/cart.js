@@ -1,15 +1,11 @@
-/*
 
--afficher un message d'erreur si besoin
--constituer un objet contact (à partir des données du formulaire) et un tableau de produits
-*/
 
 main();
 async function main() {
-  let panierTxt = localStorage.getItem("panier") || "[]"; //-stocker les choix de l'utilisateur (localStorage)
+  let panierTxt = localStorage.getItem("panier") || "[]"; //-récupérer les choix de l'utilisateur (localStorage)
   let panier = JSON.parse(panierTxt);
   let panierAvecPrix = [];
-  console.log("panier: ", panier);//-recupérer le panier 
+ 
   for (const article of panier) {//-parcourir l'array
     await fetch(`http://localhost:3000/api/products/${article.id}`).then((reponse) =>
       reponse.json()
@@ -106,7 +102,7 @@ async function main() {
 
 
     let order = { //constituer un objet JSON avec les infos de la commande (contact+panier)
-      contact: { //constituer un tableau contact (firstName, lastName, address, city, email)
+      contact: { //constituer un objet JSON contact (firstName, lastName, address, city, email)
         firstName: document.getElementById("firstName").value,
         lastName: document.getElementById("lastName").value,
         address: document.getElementById("address").value,
@@ -114,7 +110,7 @@ async function main() {
         email: document.getElementById("email").value,
 
       },
-      products: panier.map((produit) => produit.id)
+      products: panier.map((produit) => produit.id)//constituer un tableau des ID des produits du panier
     }
     let options = { //faire un fetch avec la methode POST
       method: "POST",
@@ -123,13 +119,11 @@ async function main() {
         "content-type": 'application/json',
       }
     }
-    fetch(`http://localhost:3000/api/products/order`, options)//récupérer l'identifiant de commande 
+    fetch(`http://localhost:3000/api/products/order`, options)//envoyer les informations de la commande au backend 
       .then((response) => {
         console.log(response);
         if (response.ok == true) {
-          console.log("Votre commande a été reçue avec succès!");
-          //console.log(json);
-          localStorage.removeItem("panier");//permet de ne pas stocker l'ID de la commande
+          localStorage.removeItem("panier");//permet de supprimer le panier du localStorage
           response.json().then((confirmation) => {
             window.location.replace(
               `confirmation.html?oi=${confirmation.orderId}`
@@ -153,11 +147,7 @@ async function main() {
 function formulaireValide() { //verifier la validation du formulaire avec regex
   let resultat = true;
   const inputPrenom = document.getElementById("firstName").value;
-  /*if (inputPrenom === "") {
-    document.getElementById("firstNameErrorMsg").textContent="Veuillez renseigner le prénom";
-    resultat= false; 
-  }
-  */
+
   let regexPrenom = /^[A-Z][A-Za-zàéèêëîïôùûüç\-]+(\s[A-Z][A-Za-zàéèêëîïôùûüç]+)*$/
     ; //vérification du champ prénom
   if (!regexPrenom.test(inputPrenom)) {
