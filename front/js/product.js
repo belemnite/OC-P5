@@ -5,12 +5,12 @@ function main() {
 
 let params= new URLSearchParams(window.location.search)//-récupérer l'ID depuis l'URL( grâce à urlSearchParam)
 const id = params.get('id')
-console.log(id);
+
 
 fetch(`http://localhost:3000/api/products/${id}`)//-requête fetch pour les infos du produit
 .then(reponse=>reponse.json())//extraire le contenu "JSON" de la réponse de l'API
 .then(produit=>{
-    console.log(produit);//-afficher les détails sur la page
+    //-afficher les détails sur la page
     let imageProduit= document.getElementById("image-produit");//récupérer un élément depuis la page HTML
     imageProduit.innerHTML=`<img src="${produit.imageUrl}" alt="${produit.altTxt}">`;
     const nomProduit= document.getElementById("title");
@@ -50,6 +50,7 @@ function ajouterAuPanier() {
   }
   
   localStorage.setItem ("panier",JSON.stringify(panier))
+  alert("Votre produit a bien été ajouté au panier!")
 }
 }
 

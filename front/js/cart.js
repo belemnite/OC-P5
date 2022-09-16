@@ -39,12 +39,11 @@ async function main() {
   afficherTotal();
   //ajouter un evenement supprimer avec data et dataset
   const deleteItemBtns = document.querySelectorAll(".deleteItem");
-  console.log(deleteItemBtns);
+  
   deleteItemBtns.forEach(deleteItem => {
     deleteItem.addEventListener("click", function (e) {
       const closest = e.target.closest(".cart__item");
-      console.log("dataset");
-      console.log(closest.dataset);
+
       panier = panier.filter(article => article.id != closest.dataset.id || article.couleur != closest.dataset.color);
       localStorage.setItem("panier", JSON.stringify(panier));
       panierAvecPrix = panierAvecPrix.filter(article => article.id != closest.dataset.id || article.couleur != closest.dataset.color);
@@ -55,14 +54,10 @@ async function main() {
 
   //ajouter un evenement pour changement de quantité
   const changeQuantityInputs = document.querySelectorAll(".itemQuantity");
-  console.log(changeQuantityInputs);
   changeQuantityInputs.forEach(changeQuantityInput => {
     changeQuantityInput.addEventListener("change", (e) => {
       const nouvelleQuantite = e.target.value;
-      console.log(nouvelleQuantite)
       const closest = e.target.closest(".cart__item");
-      console.log("dataset");
-      console.log(closest.dataset);
       let produitEnCours = panier.find(article => article.id == closest.dataset.id && article.couleur == closest.dataset.color);
       produitEnCours.quantite = nouvelleQuantite;
       localStorage.setItem("panier", JSON.stringify(panier));
@@ -97,7 +92,6 @@ async function main() {
       return;
 
     }
-    console.log("formulaire valide")
 
 
 
@@ -121,7 +115,7 @@ async function main() {
     }
     fetch(`http://localhost:3000/api/products/order`, options)//envoyer les informations de la commande au backend 
       .then((response) => {
-        console.log(response);
+        
         if (response.ok == true) {
           localStorage.removeItem("panier");//permet de supprimer le panier du localStorage
           response.json().then((confirmation) => {
@@ -131,12 +125,12 @@ async function main() {
           });
           return;
         } else {
-          console.log("Erreur!");
+          
           return;
         }
       })
       .catch((error) => {
-        console.log("Erreur!");
+        
       });
 
 
